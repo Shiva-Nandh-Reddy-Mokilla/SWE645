@@ -27,7 +27,6 @@ stage("Push image to docker hub"){
 			sh 'kubectl rollout restart deploy studentpage -n default'
 		}
 	} 
-}
   }
 
 }
