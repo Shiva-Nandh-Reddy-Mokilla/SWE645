@@ -1,15 +1,35 @@
 pipeline {
  agent any
+  environment{
+   DOCKERHUB_PASS= credentials('docker-pass')
+ }
  stages {
    stage("shiva") {
     steps {
           script {
            checkout scm
            sh 'rm -rf *.war'
-           
            sh 'echo ${BUILD_TIMESTAMP}'
+           sh "docker login -u narmunkh -p ${DOCKERHUB_PASS}"
+           def customImage = docker.build("narmunkh/shiva645:${BUILD_TIMESTAMP}")
            }
     }
    }
-  }
+stage("Push image to docker hub"){
+      steps {
+        sh 'docker push narmunkh/shiva645:${BUILD_TIMESTAMP}'
+      }
+    }
+ stage("deploying on k8")
+	{
+		steps{
+			sh 'kubectl set image deployment/studentpage container-0=narmunkh/shiva645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+			sh 'kubectl rollout restart deploy studentpage -n default'
+		}
+	} 
 }
+  }
+
+}
+
+
