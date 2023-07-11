@@ -8,7 +8,7 @@ pipeline {
     steps {
           script {
            checkout scm
-           sh 'rm -rf *.war'
+           
            sh 'echo ${BUILD_TIMESTAMP}'
            sh "docker login -u narmunkh -p ${DOCKERHUB_PASS}"
            def customImage = docker.build("narmunkh/shiva645:${BUILD_TIMESTAMP}")
