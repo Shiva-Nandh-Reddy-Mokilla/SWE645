@@ -20,7 +20,7 @@ stage("Push image to docker hub"){
         sh 'docker push narmunkh/shiva645:${BUILD_TIMESTAMP}'
       }
     }
- stage("deploying on k8")
+ stage("deploying on  k8")
 	{
 		steps{
 			sh 'kubectl set image deployment/studentpage container-0=narmunkh/shiva645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
